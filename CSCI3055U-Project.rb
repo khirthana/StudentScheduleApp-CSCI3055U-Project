@@ -72,7 +72,7 @@ Shoes.app :title => "Student Schedule App", :width => 640, :height => 430 do
               @day="Saturday"
             end
 
-            @schedule=@day+" "+@e[3]+":"+@e[5]+"-"+@e[6]+":"+@e[7]+" "+@e[2]+" "+@e[1]+" "+@e[8]
+            @schedule=counter+" : "+@day+" "+@e[3]+":"+@e[5]+"-"+@e[6]+":"+@e[7]+" "+@e[2]+" "+@e[1]+" "+@e[8]
 
             @schedules.insert(counter,@schedule)
 
