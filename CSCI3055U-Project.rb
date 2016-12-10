@@ -8,15 +8,22 @@ Shoes.app :title => "Schedule Builder App", :width => 640, :height => 430 do
   border(darkblue,
          strokewidth: 6)
   stack(margin: 12) do
+  @AppName = para "Schedule Builder App"
+  @AppName.style(stroke: darkblue,:align=>"center" ,:size=>"large" ,font: "Verdana Italic" )
+
+  button "Info",:width =>50  do
+    alert "Schedule Builder App\n\n   Enter course code and click -Get schedule- button to display schedule. \n\n   To view course schedule for course, enter course code(CSCI 3055U) \nOR\n   enter all for all course schedules \nOR\n   enter program code (CSCI or SOFE) for all program course schedules\n\nDeveloped by: Khirthana Subramanian 100453865"
+  end
+  
   para "Enter course code (ie: CSCI 3055U)"
     flow do
       @edit = edit_line
 
       button "Get schedule",:width => 100  do
 
-  #para @edit.text
-        if (@edit.text).eql? ""
+        if (@edit.text).empty? or (@edit.text).size<4 or (@edit.text).size>9
           alert "Enter course code!"
+
         elsif (@edit.text).eql? "all"
           @box = edit_box :width => 0.97, :height => 80, :text =>'',:margin_left => '2%'
 
@@ -55,8 +62,12 @@ Shoes.app :title => "Schedule Builder App", :width => 640, :height => 430 do
               @output=@output+@schedule
               counter = counter + 1
           end
-            #prints schedule to user
-            @box.text= @output
+
+          @file.close
+
+          #prints schedule to user
+          @box.text= @output
+
         else
           @box = edit_box :width => 0.97, :height => 80, :text =>'',:margin_left => '2%'
 
@@ -101,8 +112,11 @@ Shoes.app :title => "Schedule Builder App", :width => 640, :height => 430 do
             end
           end
 
+          @file.close
+
         #prints schedule to user
           @box.text= @output
+
         end
       end
     end
