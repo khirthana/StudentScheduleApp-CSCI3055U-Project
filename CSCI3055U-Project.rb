@@ -2,22 +2,30 @@
 #Khirthana Subramanian
 #100453865
 
-Shoes.app :title => "Schedule Builder App", :width => 640, :height => 430 do
+Shoes.app :title => "Schedule Builder App", :width => 800, :height => 550 do
 
   background whitesmoke
   border(darkblue,
          strokewidth: 6)
-  stack(margin: 12) do
-  @AppName = para "Schedule Builder App"
-  @AppName.style(stroke: darkblue,:align=>"center" ,:size=>"large" ,font: "Verdana Italic" )
-
-  button "Info",:width =>50  do
-    alert "Schedule Builder App\n\n   Enter course code and click -Get schedule- button to display schedule. \n\n   To view course schedule for course, enter course code(CSCI 3055U) \nOR\n   enter all for all course schedules \nOR\n   enter program code (CSCI or SOFE) for all program course schedules\n\nDeveloped by: Khirthana Subramanian 100453865"
+  stack(margin_left: 12,margin_top:10) do
+    @AppName = para "Schedule Builder App"
+    @AppName.style(stroke: darkblue,:align=>"center"  ,font: "Verdana Italic 24px" )
   end
-  
-  para "Enter course code (ie: CSCI 3055U)"
+  stack(margin_left: '45%',margin_bottom:10) do
+    @img = image 'uoit-logo.jpg'
+    @img.style(height:50,width:80,:align=>"center")
+  end
+  stack(margin_left: 12) do
+    button "Info",:margin_left => '45%' do
+      alert "Schedule Builder App\n\n   Enter course code and click -Get schedule- button to display schedule. \n\n   To view course schedule for course, enter course code(CSCI 3055U) \nOR\n   enter all for all course schedules \nOR\n   enter program code (CSCI or SOFE) for all program course schedules\n\nDeveloped by: Khirthana Subramanian 100453865"
+    end
+  end
+    stack(margin: 12) do
     flow do
+      para "Enter course code (ie: CSCI 3055U): ",stroke: midnightblue
+
       @edit = edit_line
+      @edit.style(width => 100)
 
       button "Get schedule",:width => 100  do
 
@@ -118,6 +126,15 @@ Shoes.app :title => "Schedule Builder App", :width => 640, :height => 430 do
           @box.text= @output
 
         end
+      end
+    end
+  end
+  stack(margin: 12) do
+    flow do
+      para "Enter schedule line number:",stroke: midnightblue
+      @edit2 = edit_line
+      @edit2.style(width => 100)
+      button "Save schedule to CSV file",:width => 200 do
       end
     end
   end
