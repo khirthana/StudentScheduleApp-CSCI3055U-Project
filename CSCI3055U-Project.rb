@@ -1,6 +1,9 @@
 #CSCI3055U Project - Student Schedule App
-#user enters course code; program will extract appropriate schedule and dispay to user
-#After viewing schedule output; user enter schedules lines number to save to csv file which can be imported to Google Calender and used as schedule for first week of classes
+
+#User enters course code; program will extract appropriate schedule and dispay to user
+#After viewing schedule output; 
+#	user enter schedules lines number to save to csv file 
+#		which can be imported to Google Calender and used as schedule for first week of classes
 
 #Khirthana Subramanian
 #100453865
@@ -16,54 +19,52 @@ $schedules = Array.new
 #method to extract schedule for user input course code using schedule.txt file
 def get_schedule(input)
 	 
-	  @file = File.new("schedule.txt", "r")
-	  @elements = Array.new
-	  #@schedules = Array.new
+  @file = File.new("schedule.txt", "r")
+  @elements = Array.new
 
-	  @output_lines="Schedule for "+ input+": \n"
-	
-	  @day=""
+  @output_lines="Schedule for "+ input+": \n"
 
-	#search for course code input by user and extract schedule from the schedule.txt file
-	  while (@line = @file.gets)
-	  
-		if @line.include? input
-		  @elements.insert($counter,@line)
-		  @e=@line.split("|")
+  @day=""
 
-	#format and display the day of class for user
-		  puts case @e[4]
-		  when "M"
-			@day="Monday"
-		  when "T"
-			@day="Tuesday"
-		  when "W"
-			@day="Wednesday"
-		  when "R"
-			@day="Thursday"
-		  when "F"
-			@day="Friday"
-		  else
-			@day="Saturday"
-		  end
+#search for course code input by user and extract schedule from the schedule.txt file
+  while (@line = @file.gets)
+  
+	if @line.include? input
+	  @elements.insert($counter,@line)
+	  @e=@line.split("|")
 
-		  @schedule=$counter.to_s+" :   "+@day+"   "+@e[3]+":"+@e[5]+"-"+@e[6]+":"+@e[7]+"   "+@e[2]+" "+@e[1]+"   "+@e[8]
-
-		  $schedules.insert($counter,@schedule)
-
-		  @output_lines=@output_lines+@schedule
-		  $counter = $counter + 1
-		end
+#format and display the day of class for user
+	  puts case @e[4]
+	  when "M"
+		@day="Monday"
+	  when "T"
+		@day="Tuesday"
+	  when "W"
+		@day="Wednesday"
+	  when "R"
+		@day="Thursday"
+	  when "F"
+		@day="Friday"
+	  else
+		@day="Saturday"
 	  end
 
-	  @file.close
-	  
-	  if $schedules.empty?
-		@output_lines=""
-	 
-	  end
-	  
-	  return @output_lines
+	  @schedule=$counter.to_s+" :   "+@day+"   "+@e[3]+":"+@e[5]+"-"+@e[6]+":"+@e[7]+"   "+@e[2]+" "+@e[1]+"   "+@e[8]
+
+	  $schedules.insert($counter,@schedule)
+
+	  @output_lines=@output_lines+@schedule
+	  $counter = $counter + 1
+	end
+  end
+
+  @file.close
+  
+  if $schedules.empty?
+	@output_lines=""
+  end
+  
+  return @output_lines
 end
 
 
@@ -73,55 +74,55 @@ def save_schedule(input)
 
  @input_array=input.split(",")
 	 
-	 CSV.open("MySchedule.csv", "w") do |csv|
-			  csv << ["Subject", "Start Date", "Start Time", "End Date","End Time","All Day Event","Description","Location","Private"]
-			 
-			  for @index in 0 ... (@input_array.size)
-				  @selected_line=($schedules[(@input_array[@index]).to_i]).split("   ")
-				  
-				  @date=""
-				  puts case @selected_line[1]
-				  when "Monday"
-					@date="09/12/2016"
-				  when "Tuesday"
-					@date="09/13/2016"
-				  when "Wednesday"
-					@date="09/14/2016"
-				  when "Thursday"
-					@date="09/08/2016"
-				  when "Friday"
-					@date="09/09/2016"
-				  else
-					@date="09/10/2016"
-				  end
+ CSV.open("MySchedule.csv", "w") do |csv|
+	  csv << ["Subject", "Start Date", "Start Time", "End Date","End Time","All Day Event","Description","Location","Private"]
+	 
+	  for @index in 0 ... (@input_array.size)
+		  @selected_line=($schedules[(@input_array[@index]).to_i]).split("   ")
+		  
+		  @date=""
+		  puts case @selected_line[1]
+		  when "Monday"
+			@date="09/12/2016"
+		  when "Tuesday"
+			@date="09/13/2016"
+		  when "Wednesday"
+			@date="09/14/2016"
+		  when "Thursday"
+			@date="09/08/2016"
+		  when "Friday"
+			@date="09/09/2016"
+		  else
+			@date="09/10/2016"
+		  end
 
-				  @time=@selected_line[2].split("-")
-				  @start=@time[0].split(":")
-				  @end=@time[1].split(":")
-			  
-				   if ((@end[1]).size)<2
-					@end[1]=@end[1]+"0"
-				   end
-				   
-				   if ((@start[0]).to_i)<12 
-					@start_time=@time[0]+" AM"
-				   elsif (@start[0]).eql? "12"
-					@start_time=@time[0]+" PM"
-				   else
-					@start_time=(((@start[0]).to_i)-12).to_s+":"+@start[1]+" PM"
-				   end
-				   
-				   if ((@end[0]).to_i)<12 
-					@end_time=@time[1]+" AM"
-				   elsif (@end[0]).eql? "12"
-					@end_time=@time[1]+" PM"
-				   else
-					@end_time=(((@end[0]).to_i)-12).to_s+":"+@end[1]+" PM"
-				   end
-				  
-				  csv << [@selected_line[3], @date, @start_time, @date,@end_time,"False","",@selected_line[4],"True"]
-				  
-				end
+		  @time=@selected_line[2].split("-")
+		  @start=@time[0].split(":")
+		  @end=@time[1].split(":")
+	  
+		   if ((@end[1]).size)<2
+			@end[1]=@end[1]+"0"
+		   end
+		   
+		   if ((@start[0]).to_i)<12 
+			@start_time=@time[0]+" AM"
+		   elsif (@start[0]).eql? "12"
+			@start_time=@time[0]+" PM"
+		   else
+			@start_time=(((@start[0]).to_i)-12).to_s+":"+@start[1]+" PM"
+		   end
+		   
+		   if ((@end[0]).to_i)<12 
+			@end_time=@time[1]+" AM"
+		   elsif (@end[0]).eql? "12"
+			@end_time=@time[1]+" PM"
+		   else
+			@end_time=(((@end[0]).to_i)-12).to_s+":"+@end[1]+" PM"
+		   end
+		  
+		  csv << [@selected_line[3], @date, @start_time, @date,@end_time,"False","",@selected_line[4],"True"]
+		  
+		end
 	end
 end
 
@@ -171,51 +172,51 @@ Shoes.app :title => "Student Schedule Builder App", :width => 800, :height => 55
   
     
     stack(margin: 12) do
-    flow do
-      para "Enter course code (ie: CSCI 3055U): ",stroke: midnightblue
-      
-	  #user input for course code is stored in @course_code
-      @course_code = edit_line
-      @course_code.style(width => 100)
-
-
-	  #when button clicked, schedule is displayed to user
-      button "Get schedule",:width => 100  do
-		
-		#if user did not enter anything or entered input which is not within course code format
-        if (@course_code.text).empty? or (@course_code.text).size>10
-          alert "Enter course code!"
-		
-		#if user input is "all" then schedule for all courses will be displayed
-		elsif (@course_code.text).size<4 and (@course_code.text).eql? "all"
-          #calls method to display schedule
-		  @output=get_schedule("")
+		flow do
+		  para "Enter course code (ie: CSCI 3055U): ",stroke: midnightblue
 		  
-          #prints schedule to user
-		  @box = para:width => 0.97, :height => 80, :text =>'',:margin_left => '2%',font: "Times 16px" 
-          @box.text= @output
- 
-		#if user entered input which is not within course code format
-		elsif (@course_code.text).size<4 
-			alert "Enter course code!"
-			
-		#if user input is within course code format
-        else
-		
-		 #calls method to display schedule
-          @output=get_schedule(@course_code.text)
+		  #user input for course code is stored in @course_code
+		  @course_code = edit_line
+		  @course_code.style(width => 100)
 
-		  if @output.empty?
-			alert "Enter valid course code!"
-		  else
-			#prints schedule to user
-			@box = para :width => 0.97, :height => 80, :text =>'',:margin_left => '2%',font: "Times 16px" 
-			@box.text= @output
-		 end
-		 
-        end
-      end
-    end
+
+		  #when button clicked, schedule is displayed to user
+		  button "Get schedule",:width => 100  do
+			
+			#if user did not enter anything or entered input which is not within course code format
+			if (@course_code.text).empty? or (@course_code.text).size>10
+			  alert "Enter course code!"
+			
+			#if user input is "all" then schedule for all courses will be displayed
+			elsif (@course_code.text).size<4 and (@course_code.text).eql? "all"
+			  #calls method to display schedule
+			  @output=get_schedule("")
+			  
+			  #prints schedule to user
+			  @box = para:width => 0.97, :height => 80, :text =>'',:margin_left => '2%',font: "Times 16px" 
+			  @box.text= @output
+	 
+			#if user entered input which is not within course code format
+			elsif (@course_code.text).size<4 
+				alert "Enter course code!"
+				
+			#if user input is within course code format
+			else
+			
+			 #calls method to display schedule
+			  @output=get_schedule(@course_code.text)
+
+			  if @output.empty?
+				alert "Enter valid course code!"
+			  else
+				#prints schedule to user
+				@box = para :width => 0.97, :height => 80, :text =>'',:margin_left => '2%',font: "Times 16px" 
+				@box.text= @output
+			  end
+			 
+			end
+		  end
+		end
   end
   
   
