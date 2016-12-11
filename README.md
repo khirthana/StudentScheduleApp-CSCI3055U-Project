@@ -3,7 +3,8 @@
 Language: Ruby  
 
 Desktop GUI Application  
-App to display student schedule when user selects the courses taken   
-Dataset: https://goo.gl/kZwKZC (course schedule data)   
+Displays student schedule when user enters the course code associated with the course taken  
+User can also save selected schedules to CSV file which can be imported to Google Calender 
+Dataset: https://goo.gl/kZwKZC (UOIT course schedule data)   
   
 Developed by: Khirthana Subramanian - 100453865  
