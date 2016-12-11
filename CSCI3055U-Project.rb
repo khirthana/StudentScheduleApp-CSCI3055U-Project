@@ -5,11 +5,13 @@
 #Khirthana Subramanian
 #100453865
 
+
 require 'csv'
 
 $counter=0
 
 $schedules = Array.new
+
 
 #method to extract schedule for user input course code using schedule.txt file
 def get_schedule(input)
@@ -62,24 +64,23 @@ def get_schedule(input)
 	  end
 	  
 	  return @output_lines
-	  
 end
 
-#method to save selected schedules by user input to csv file 
+
+
+#method to save selected schedules by user input to "MySchedule.csv" file 
 def save_schedule(input)
 
  @input_array=input.split(",")
- 
-		
-	
+	 
 	 CSV.open("MySchedule.csv", "w") do |csv|
 			  csv << ["Subject", "Start Date", "Start Time", "End Date","End Time","All Day Event","Description","Location","Private"]
+			 
 			  for @index in 0 ... (@input_array.size)
-				  @a=($schedules[(@input_array[@index]).to_i]).split("   ")
-				  
+				  @selected_line=($schedules[(@input_array[@index]).to_i]).split("   ")
 				  
 				  @date=""
-				  puts case @a[1]
+				  puts case @selected_line[1]
 				  when "Monday"
 					@date="09/12/2016"
 				  when "Tuesday"
@@ -94,7 +95,7 @@ def save_schedule(input)
 					@date="09/10/2016"
 				  end
 
-				  @time=@a[2].split("-")
+				  @time=@selected_line[2].split("-")
 				  @start=@time[0].split(":")
 				  @end=@time[1].split(":")
 			  
@@ -118,35 +119,38 @@ def save_schedule(input)
 					@end_time=(((@end[0]).to_i)-12).to_s+":"+@end[1]+" PM"
 				   end
 				  
-				  csv << [@a[3], @date, @start_time, @date,@end_time,"False","",@a[4],"True"]
+				  csv << [@selected_line[3], @date, @start_time, @date,@end_time,"False","",@selected_line[4],"True"]
 				  
 				end
-		end
+	end
 end
+
+
 
 #GUI using Shoes
 Shoes.app :title => "Student Schedule Builder App", :width => 800, :height => 550 do
-
-  background whitesmoke
+  
+  #layout customized
+  background white
   border(darkblue,
          strokewidth: 6)
 		 
 	
-	
+  #app name
   stack(margin_left: 12,margin_top:10) do
     @AppName = para "Student Schedule Builder"
     @AppName.style(stroke: darkblue,:align=>"center"  ,font: "Verdana Italic 24px" )
   end
   
   
-  
+  #uoit logo image
   stack(margin_left: '45%',margin_bottom:10) do
     @img = image 'uoit-logo.jpg'
     @img.style(height:50,width:80,:align=>"center")
   end
   
   
-  
+  #app information and instructions
   stack(margin_left: 12) do
     button "Info",:margin_left => '45%' do
       alert "Student Schedule Builder App   
@@ -165,40 +169,47 @@ Shoes.app :title => "Student Schedule Builder App", :width => 800, :height => 55
   end
   
   
-  
+    
     stack(margin: 12) do
     flow do
       para "Enter course code (ie: CSCI 3055U): ",stroke: midnightblue
+      
+	  #user input for course code is stored in @course_code
+      @course_code = edit_line
+      @course_code.style(width => 100)
 
-      @edit = edit_line
-      @edit.style(width => 100)
 
-
-	  
+	  #when button clicked, schedule is displayed to user
       button "Get schedule",:width => 100  do
-
-        if (@edit.text).empty? or (@edit.text).size>10
+		
+		#if user did not enter anything or entered input which is not within course code format
+        if (@course_code.text).empty? or (@course_code.text).size>10
           alert "Enter course code!"
-		  
-		elsif (@edit.text).size<4 and (@edit.text).eql? "all"
-        
+		
+		#if user input is "all" then schedule for all courses will be displayed
+		elsif (@course_code.text).size<4 and (@course_code.text).eql? "all"
+          #calls method to display schedule
 		  @output=get_schedule("")
 		  
           #prints schedule to user
-		  @box = edit_box :width => 0.97, :height => 80, :text =>'',:margin_left => '2%'
+		  @box = para:width => 0.97, :height => 80, :text =>'',:margin_left => '2%',font: "Times 16px" 
           @box.text= @output
  
-		elsif (@edit.text).size<4 
+		#if user entered input which is not within course code format
+		elsif (@course_code.text).size<4 
 			alert "Enter course code!"
 			
+		#if user input is within course code format
         else
-          @output=get_schedule(@edit.text)
+		
+		 #calls method to display schedule
+          @output=get_schedule(@course_code.text)
 
 		  if @output.empty?
 			alert "Enter valid course code!"
 		  else
 			#prints schedule to user
-			@box = edit_box :width => 0.97, :height => 80, :text =>'',:margin_left => '2%'
+			@box = para :width => 0.97, :height => 80, :text =>'',:margin_left => '2%',font: "Times 16px" 
 			@box.text= @output
 		 end
 		 
@@ -212,10 +223,17 @@ Shoes.app :title => "Student Schedule Builder App", :width => 800, :height => 55
   stack(margin: 12) do
     flow do
       para "Enter schedule line number:",stroke: midnightblue
-      @edit2 = edit_line
-      @edit2.style(width => 100)
+	  
+	  #user input for schedule line number is stored in @line_number
+      @line_number = edit_line
+      @line_number.style(width => 100)
+	  
+	  #when user click button, then selected schedules will be saved to CSV file
       button "Save schedule to CSV file",:width => 200 do
-	   save_schedule(@edit2.text)
+	  
+	   #calls method to save selected schedule to CSV file
+	   save_schedule(@line_number.text)
+	   
       end
     end
   end
