@@ -1,5 +1,6 @@
 #CSCI3055U Project - Student Schedule App
 #user enters course code; program will extract appropriate schedule and dispay to user
+#After viewing schedule output; user enter schedules lines number to save to csv file which can be imported to Google Calender and used as schedule for first week of classes
 
 #Khirthana Subramanian
 #100453865
@@ -8,12 +9,14 @@ require 'csv'
 
 $counter=0
 
+$schedules = Array.new
+
 #method to extract schedule for user input course code using schedule.txt file
 def get_schedule(input)
 	 
 	  @file = File.new("schedule.txt", "r")
 	  @elements = Array.new
-	  @schedules = Array.new
+	  #@schedules = Array.new
 
 	  @output_lines="Schedule for "+ input+": \n"
 	
@@ -44,7 +47,7 @@ def get_schedule(input)
 
 		  @schedule=$counter.to_s+" :   "+@day+"   "+@e[3]+":"+@e[5]+"-"+@e[6]+":"+@e[7]+"   "+@e[2]+" "+@e[1]+"   "+@e[8]
 
-		  @schedules.insert($counter,@schedule)
+		  $schedules.insert($counter,@schedule)
 
 		  @output_lines=@output_lines+@schedule
 		  $counter = $counter + 1
@@ -53,7 +56,7 @@ def get_schedule(input)
 
 	  @file.close
 	  
-	  if @schedules.empty?
+	  if $schedules.empty?
 		@output_lines=""
 	 
 	  end
@@ -62,7 +65,7 @@ def get_schedule(input)
 	  
 end
 
-
+#method to save selected schedules by user input to csv file 
 def save_schedule(input)
 
  @input_array=input.split(",")
@@ -72,7 +75,7 @@ def save_schedule(input)
 	 CSV.open("MySchedule.csv", "w") do |csv|
 			  csv << ["Subject", "Start Date", "Start Time", "End Date","End Time","All Day Event","Description","Location","Private"]
 			  for @index in 0 ... (@input_array.size)
-				  @a=(@schedules[(@input_array[@index]).to_i]).split("   ")
+				  @a=($schedules[(@input_array[@index]).to_i]).split("   ")
 				  
 				  
 				  @date=""
@@ -146,7 +149,18 @@ Shoes.app :title => "Student Schedule Builder App", :width => 800, :height => 55
   
   stack(margin_left: 12) do
     button "Info",:margin_left => '45%' do
-      alert "Student Schedule Builder App\n\n   Enter course code and click -Get schedule- button to display schedule. \n\n   To view course schedule for course, enter course code(CSCI 3055U) \nOR\n   enter all for all course schedules \nOR\n   enter program code (CSCI or SOFE) for all program course schedules\n\nDeveloped by: Khirthana Subramanian 100453865"
+      alert "Student Schedule Builder App   
+	  \n       Enter course code and click -Get schedule- button to display schedule.    
+	  \n       To view course schedule for course:
+	  \n           -Enter course code(CSCI 3055U)   
+	  OR\n          -Enter all for all course schedules    
+	  OR\n          -Enter program code (CSCI or SOFE) for all program course schedules 
+	  \n\n     After viewing the schedule output:
+	  \n         -User can enter schedules lines number such as 1,2,5 
+	  \n                 and click -Save schedule- to CSV file- button to save to CSV file 
+	  \n         -CSV file can be imported to Google Calender and used as schedule for first week of classes
+	  \n         -User can manually edit each events to repat on Google Calender
+	  \n\nDeveloped by: Khirthana Subramanian 100453865"
     end
   end
   
