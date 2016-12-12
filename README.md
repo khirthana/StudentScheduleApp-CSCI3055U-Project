@@ -4,7 +4,7 @@ Language: Ruby
 
 Desktop GUI Application (Ruby Shoes)
 
-Source code: CSCI3055U-Project.rb
+Source code: CSCI3055U-Project.rb   
 Displays student schedule when user enters the course code associated with the course taken  
 User can also save selected schedules to (MySchedule.csv) CSV file which can be imported to Google Calender   
 
