@@ -11,7 +11,7 @@
 
 require 'csv'
 
-$counter=0
+$counter=1
 
 $schedules = Array.new
 
